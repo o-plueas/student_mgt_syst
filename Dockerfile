@@ -27,14 +27,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Set proper permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Clear and cache configuration
+# RUN php artisan config:clear && php artisan cache:clear
+# Clear cache after dependencies are installed
+
 # Expose port 8080 (Railway expects this)
 EXPOSE 8080
 
-# Run migrations, clear cache, and start Laravel server in one command
-CMD php artisan migrate --force \
-    && php artisan config:clear \
-    && php artisan cache:clear \
-    && php artisan route:clear \
-    && php artisan view:clear \
-    && php artisan config:cache \
-    && php artisan serve --host=0.0.0.0 --port=8080
+# Run migrations and start Laravel server
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080

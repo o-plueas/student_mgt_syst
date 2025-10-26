@@ -29,6 +29,12 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 # Clear and cache configuration
 # RUN php artisan config:clear && php artisan cache:clear
+# Clear cache after dependencies are installed
+RUN php artisan config:clear \
+&& php artisan cache:clear \
+&& php artisan route:clear \
+&& php artisan view:clear \
+&& php artisan config:cache
 
 # Expose port 8080 (Railway expects this)
 EXPOSE 8080

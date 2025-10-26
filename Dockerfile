@@ -1,5 +1,5 @@
-# Use official PHP image with CLI (not FPM for Laravel serve)
-FROM php:8.2-cli
+# Use official PHP image with FPM
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www/html
@@ -26,13 +26,17 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Set proper permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
 
-# Generate application key if not present
-RUN php artisan key:generate --force
+# Expose port 9000 and start php-fpm server
+# EXPOSE 9000
+
+# CMD ["php-fpm"]
+
 
 # Expose port 8080
 EXPOSE 8080
 
-# Start Laravel server (only ONE CMD)
+# Start Laravel server
 CMD php artisan serve --host=0.0.0.0 --port=8080
+
+CMD php artisan migrate --force && php-fpm

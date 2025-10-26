@@ -27,16 +27,11 @@ RUN composer install --no-dev --optimize-autoloader
 # Set proper permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port 9000 and start php-fpm server
-# EXPOSE 9000
+# Clear and cache configuration
+RUN php artisan config:clear && php artisan cache:clear
 
-# CMD ["php-fpm"]
-
-
-# Expose port 8080
+# Expose port 8080 (Railway expects this)
 EXPOSE 8080
 
-# Start Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=8080
-
-CMD php artisan migrate --force && php-fpm
+# Run migrations and start Laravel server
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8080

@@ -28,7 +28,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Clear and cache configuration
-RUN php artisan config:clear && php artisan cache:clear
+# RUN php artisan config:clear && php artisan cache:clear
 
 # Expose port 8080 (Railway expects this)
 EXPOSE 8080
